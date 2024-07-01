@@ -21,7 +21,7 @@ aumentarCompletados();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.6/jquery.easypiechart.min.js" charset="utf-8"></script>
     <link rel="stylesheet" href="estilo.css">
-    <title>QUIZ GAME</title>
+    <title>Examen</title>
 </head>
 <body>
 

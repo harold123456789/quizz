@@ -38,7 +38,7 @@
                 <div class="icono" id="4">
                     <i class="fa-solid fa-globe"></i>
                 </div>
-                Quiz.com
+                Examen
             </a>
         </li>
         <li>

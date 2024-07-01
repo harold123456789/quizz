@@ -57,12 +57,12 @@ $resltado_temas = obetenerTodosLosTemas();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="estilo.css">
-    <title>Quiz Game</title>
+    <title>Examen</title>
 </head>
 <body>
     <div class="contenedor">
         <header>
-            <h1>QUIZ GAME</h1>
+            <h1>Examen</h1>
         </header>
         <div class="contenedor-info">
             <?php include("nav.php") ?>
