@@ -164,6 +164,19 @@ footer a:hover {
     color: #e61610;
 }
 
+        .correcto {
+            color: green;
+        }
+        .incorrecto {
+            color: red;
+        }
+        .correcto::after {
+            content: " ✔";
+        }
+        .incorrecto::after {
+            content: " ✖";
+        }
+
 .container-juego {
     position: relative;
     overflow: hidden;

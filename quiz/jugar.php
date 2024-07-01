@@ -111,6 +111,7 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
 
             opciones.forEach(opcion => {
                 opcion.onclick = null; // Deshabilitar más clics
+                opcion.style.pointerEvents = 'none';
                 const input = opcion.querySelector('input');
                 const p = opcion.querySelector('p');
                 
@@ -126,6 +127,8 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
                     input.checked = false;
                 }
             });
+
+            
         }
     </script>
 </body>
