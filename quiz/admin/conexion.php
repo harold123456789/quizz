@@ -3,7 +3,7 @@
 $server		="localhost";
 $username	="root";
 $password	="";
-$bd			="cliente";
+$bd			="examen_db";
 
 //creamos una conexión
 $conn = mysqli_connect($server, $username, $password, $bd);

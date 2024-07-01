@@ -9,7 +9,6 @@ function obtenerConfiguracion()
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
 
-
     if ($row['total'] == '0') {
         //No existe el registro 1 - DEBO INSERTAR el registro por primera vez
         $query = "INSERT INTO config (id,usuario,password,totalPreguntas)
