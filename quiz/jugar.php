@@ -1,8 +1,9 @@
+
 <?php
 session_start();
 
 // Si el usuario no está logeado, lo enviamos al index
-if (!$_SESSION['usuario']) {
+if (!isset($_SESSION['usuario'])) {
     header("Location:index.php");
     exit();
 }
@@ -17,11 +18,11 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
 
     // Controlar si la respuesta está bien
     if ($_SESSION['respuesta_correcta'] == $_GET['respuesta']) {
-        $_SESSION['correctas'] = $_SESSION['correctas'] + 1;
+        $_SESSION['correctas']++;
     }
 
-    $_SESSION['numPreguntaActual'] = $_SESSION['numPreguntaActual'] + 1;
-    if ($_SESSION['numPreguntaActual'] < ($totalPreguntasPorJuego)) {
+    $_SESSION['numPreguntaActual']++;
+    if ($_SESSION['numPreguntaActual'] < $totalPreguntasPorJuego) {
         $preguntaActual = obtenerPreguntaPorId($_SESSION['idPreguntas'][$_SESSION['numPreguntaActual']]);
         $_SESSION['respuesta_correcta'] = $preguntaActual['correcta'];
     } else {
@@ -29,6 +30,7 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
         $_SESSION['nombreCategoria'] = obtenerNombreTema($_SESSION['idCategoria']);
         $_SESSION['score'] = ($_SESSION['correctas'] * 100) / $totalPreguntasPorJuego;
         header("Location: final.php");
+        exit();
     }
 } else { // Comenzó a jugar
     $_SESSION['correctas'] = 0;
@@ -83,7 +85,7 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
             <h3>
                 <?php echo $preguntaActual['pregunta']; ?>
             </h3>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+            <form id="formulario" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
                 <div class="opciones">
                     <label for="respuesta1" class="op1" onclick="seleccionar(this, 'A')">
                         <p><?php echo $preguntaActual['opcion_a']; ?></p>
@@ -98,6 +100,17 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
                         <input type="radio" name="respuesta" value="C" id="respuesta3" required>
                     </label>
                 </div>
+                <div id="inc" style="display:none;">
+                    <label for="respuesta3" class="op3">
+                        <p>Se terminó el tiempo, haz clic en siguiente</p>
+                        <input type="radio" name="respuesta" value="C" id="respuesta3_incorrecto" required>
+                    </label>
+                </div>
+                <div id="myProgress" style="width: 100%; height: 20px;">
+                    <div id="myBar" style="width: 0%; height: 100%; background-color: green;">
+                        <div id="label" style="text-align: center; line-height: 20px; color: white;"></div>
+                    </div>
+                </div>
                 <div class="boton">
                     <input type="submit" value="Siguiente" name="siguiente">
                 </div>
@@ -105,16 +118,43 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
         </div>
     </div>
     <script>
+        let timeout;
+
+        window.onload = function() {
+            var elem = document.getElementById("myBar");
+            var width = 0;
+            var id = setInterval(frame, 150);
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(id);
+                } else {
+                    width++;
+                    elem.style.width = width + '%';
+                    document.getElementById("label").innerHTML = width + '%';
+                }
+            }
+
+            timeout = setTimeout(function() {
+                const incorrectOption = document.querySelector('#respuesta3_incorrecto');
+                const p = incorrectOption.previousElementSibling;
+                p.classList.add('incorrecto');
+                document.getElementById('inc').style.display = 'block';
+                document.getElementById('formulario').submit(); // Enviar el formulario automáticamente
+            }, 15000); // 15 segundos
+        }
+
         function seleccionar(element, seleccion) {
             const correctAnswer = "<?php echo $_SESSION['respuesta_correcta']; ?>";
             const opciones = document.querySelectorAll('.opciones label');
 
             opciones.forEach(opcion => {
                 opcion.onclick = null; // Deshabilitar más clics
+                clearTimeout(timeout);
                 opcion.style.pointerEvents = 'none';
+
                 const input = opcion.querySelector('input');
                 const p = opcion.querySelector('p');
-                
+
                 if (input.value === correctAnswer) {
                     p.classList.add('correcto');
                 } else if (input.value === seleccion) {
@@ -127,8 +167,6 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
                     input.checked = false;
                 }
             });
-
-            
         }
     </script>
 </body>
