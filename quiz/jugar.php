@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -106,10 +105,8 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
                         <input type="radio" name="respuesta" value="C" id="respuesta3_incorrecto" required>
                     </label>
                 </div>
-                <div id="myProgress" style="width: 100%; height: 20px;">
-                    <div id="myBar" style="width: 0%; height: 100%; background-color: green;">
-                        <div id="label" style="text-align: center; line-height: 20px; color: white;"></div>
-                    </div>
+                <div id="timer" style="font-size: 20px; font-weight: bold; margin-top: 20px;">
+                    Tiempo restante: <span id="time">15</span> segundos
                 </div>
                 <div class="boton">
                     <input type="submit" value="Siguiente" name="siguiente">
@@ -119,28 +116,23 @@ if (isset($_GET['siguiente'])) { // Ya está jugando
     </div>
     <script>
         let timeout;
+        let timeRemaining = 15;
 
         window.onload = function() {
-            var elem = document.getElementById("myBar");
-            var width = 0;
-            var id = setInterval(frame, 150);
-            function frame() {
-                if (width >= 100) {
-                    clearInterval(id);
+            const timerElement = document.getElementById('time');
+            timeout = setInterval(function() {
+                if (timeRemaining > 0) {
+                    timeRemaining--;
+                    timerElement.textContent = timeRemaining;
                 } else {
-                    width++;
-                    elem.style.width = width + '%';
-                    document.getElementById("label").innerHTML = width + '%';
+                    clearInterval(timeout);
+                    const incorrectOption = document.querySelector('#respuesta3_incorrecto');
+                    const p = incorrectOption.previousElementSibling;
+                    p.classList.add('incorrecto');
+                    document.getElementById('inc').style.display = 'block';
+                    document.getElementById('formulario').submit(); // Enviar el formulario automáticamente
                 }
-            }
-
-            timeout = setTimeout(function() {
-                const incorrectOption = document.querySelector('#respuesta3_incorrecto');
-                const p = incorrectOption.previousElementSibling;
-                p.classList.add('incorrecto');
-                document.getElementById('inc').style.display = 'block';
-                document.getElementById('formulario').submit(); // Enviar el formulario automáticamente
-            }, 15000); // 15 segundos
+            }, 1000);
         }
 
         function seleccionar(element, seleccion) {
